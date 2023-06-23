@@ -1,9 +1,8 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-
 const { User } = require("../models/user");
 const { HttpError, sendEmail } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
+
+
 
 const theme = async (req, res) => {
   const { id } = req.user;
