@@ -19,7 +19,7 @@ const help = async (req, res) => {
 
     const helpEmail = {
         to: email,
-        sybject: "Help with TaskPro",
+        subject: "Help with TaskPro",
         html: `<h5>Our specialist will contact you soon.</h5> <h6>We have received your message for help with the TaskPro:</h6> <p>${comment}</p>`,
     };
 
