@@ -1,33 +1,33 @@
-const express = require("express");
+const express = require('express');
 
-const tasksController = require("../../controllers/tasks");
+const tasksController = require('../../controllers/tasks');
 
-const router = express.Router();
+const taskRouter = express.Router();
 
-const { schemas } = require("../../models/task");
+const { schemas } = require('../../models/task');
 
-const { validateBody, isValidId } = require("../../decorators");
+const { validateBody, isValidId } = require('../../decorators');
 
-router.get("/", tasksController.getAllContacts);
+taskRouter.get('/', tasksController.getAllTasks);
 
-router.get("/:taskId", isValidId, tasksController.getContactById);
+taskRouter.get('/:taskId', isValidId, tasksController.getTaskById);
 
-router.post("/", validateBody(schemas.addSchema), tasksController.addContact);
+taskRouter.post('/', validateBody(schemas.taskSchemaJoi), tasksController.addTask);
 
-router.put(
-  "/:taskId",
+taskRouter.put(
+  '/:taskId',
   isValidId,
-  validateBody(schemas.addSchema),
-  tasksController.updateContact
+  validateBody(schemas.taskSchemaJoi),
+  tasksController.updateTask
 );
 
-router.patch(
-  "/:taskId/favorite",
-  isValidId,
-  validateBody(schemas.updateFavoriteSchema),
-  tasksController.updateContact
-);
+// router.patch(
+//   "/:taskId/favorite",
+//   isValidId,
+//   validateBody(schemas.updateFavoriteSchema),
+//   tasksController.updateContact
+// );
 
-router.delete("/:taskId", isValidId, tasksController.deleteContact);
+taskRouter.delete('/:taskId', isValidId, tasksController.deleteTask);
 
-module.exports = router;
+module.exports = taskRouter;

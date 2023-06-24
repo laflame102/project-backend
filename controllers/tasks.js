@@ -1,16 +1,16 @@
-const { Task } = require("../models/task");
+const { Task } = require('../models/task');
 
-const { HttpError } = require("../helpers");
-const { ctrlWrapper } = require("../decorators");
+const { HttpError } = require('../helpers');
+const { ctrlWrapper } = require('../decorators');
 
-const getAllContacts = async (req, res) => {
+const getAllTasks = async (req, res) => {
   const result = await Task.find();
   res.json(result);
 };
 
-const getContactById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Task.findById(contactId);
+const getTaskById = async (req, res) => {
+  const { taskId } = req.params;
+  const result = await Task.findById(taskId);
   if (!result) {
     throw HttpError(404);
   }
@@ -18,25 +18,25 @@ const getContactById = async (req, res) => {
   res.json(result);
 };
 
-const addContact = async (req, res) => {
+const addTask = async (req, res) => {
   const result = await Task.create(req.body);
   res.status(201).json(result);
 };
 
-const deleteContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Task.findByIdAndRemove(contactId);
+const deleteTask = async (req, res) => {
+  const { taskId } = req.params;
+  const result = await Task.findByIdAndRemove(taskId);
 
   if (!result) {
     throw HttpError(404);
   }
 
-  res.json({ message: "contact deleted" });
+  res.json({ message: 'task deleted' });
 };
 
-const updateContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Task.findByIdAndUpdate(contactId, req.body, {
+const updateTask = async (req, res) => {
+  const { taskId } = req.params;
+  const result = await Task.findByIdAndUpdate(taskId, req.body, {
     new: true,
   });
   if (!result) {
@@ -46,23 +46,23 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-const updateFavorite = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Task.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404);
-  }
+// const updateFavorite = async (req, res) => {
+//   const { contactId } = req.params;
+//   const result = await Task.findByIdAndUpdate(contactId, req.body, {
+//     new: true,
+//   });
+//   if (!result) {
+//     throw HttpError(404);
+//   }
 
-  res.json(result);
-};
+//   res.json(result);
+// };
 
 module.exports = {
-  getAllContacts: ctrlWrapper(getAllContacts),
-  getContactById: ctrlWrapper(getContactById),
-  deleteContact: ctrlWrapper(deleteContact),
-  updateContact: ctrlWrapper(updateContact),
-  addContact: ctrlWrapper(addContact),
-  updateFavorite: ctrlWrapper(updateFavorite),
+  getAllTasks: ctrlWrapper(getAllTasks),
+  getTaskById: ctrlWrapper(getTaskById),
+  deleteTask: ctrlWrapper(deleteTask),
+  updateTask: ctrlWrapper(updateTask),
+  addTask: ctrlWrapper(addTask),
+  // updateFavorite: ctrlWrapper(updateFavorite),
 };
