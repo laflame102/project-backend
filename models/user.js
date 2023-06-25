@@ -55,6 +55,21 @@ const registerSchema = Joi.object({
   password: Joi.string().min(8).max(64).required(),
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(8).max(64).required(),
+});
+
+const updateProfileSchema = Joi.object({
+  name: Joi.string().min(2).max(32),
+  email: Joi.string().pattern(emailRegexp),
+  password: Joi.string().min(8).max(64),
+});
+
+const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 const themeSchema = Joi.object({
     theme: Joi.string().valid("dark", "light", "violet"),
 });
@@ -66,8 +81,11 @@ const helpSchema = Joi.object({
 
 const schemas = {
   registerSchema,
-    themeSchema,
-    helpSchema,
+  loginSchema,
+  updateProfileSchema,
+  refreshTokenSchema,
+  themeSchema,
+  helpSchema,
 };
 
 const User = model("user", userSchema);
