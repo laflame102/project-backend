@@ -16,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/desk', deskRouter);
-app.use('/api/desk/:columnId', columnRouter);
-app.use('/api/desk/:columnId/:taskId', tasksRouter);
+app.use('/api/columns', columnRouter);
+app.use('/api/tasks', tasksRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

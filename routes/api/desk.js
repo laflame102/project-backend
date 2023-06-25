@@ -21,13 +21,6 @@ deskRouter.put(
   deskController.updateDesk
 );
 
-// router.patch(
-//   '/:taskId/favorite',
-//   isValidId,
-//   validateBody(schemas.updateFavoriteSchema),
-//   tasksController.updateContact
-// );
-
 deskRouter.delete('/:deskId', isValidId, deskController.deleteDesk);
 
 module.exports = deskRouter;

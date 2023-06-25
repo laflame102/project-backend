@@ -14,19 +14,12 @@ taskRouter.get('/:taskId', isValidId, tasksController.getTaskById);
 
 taskRouter.post('/', validateBody(schemas.taskSchemaJoi), tasksController.addTask);
 
-taskRouter.put(
+taskRouter.patch(
   '/:taskId',
   isValidId,
-  validateBody(schemas.taskSchemaJoi),
+  validateBody(schemas.updateTaskSchemaJoi),
   tasksController.updateTask
 );
-
-// router.patch(
-//   "/:taskId/favorite",
-//   isValidId,
-//   validateBody(schemas.updateFavoriteSchema),
-//   tasksController.updateContact
-// );
 
 taskRouter.delete('/:taskId', isValidId, tasksController.deleteTask);
 
