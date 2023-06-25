@@ -10,6 +10,12 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
+router.post("/refresh", validateBody(schemas.refreshTokenSchema), ctrl.refresh);
+
+router.get("/current", authenticate, ctrl.getCurrent);
+
 router.patch("/theme", authenticate, validateBody(schemas.themeSchema), ctrl.theme);
+
+router.post("/help", authenticate, validateBody(schemas.helpSchema), ctrl.help);
 
 module.exports = router;

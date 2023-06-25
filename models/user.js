@@ -22,7 +22,7 @@ const userSchema = new Schema(
       minlength: 8,
       required: [true, "Set password for user"],
     },
-    token: {
+    accessToken: {
       type: String,
       default: "",
     },
