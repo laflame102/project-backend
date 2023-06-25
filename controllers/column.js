@@ -12,7 +12,7 @@ const getColumnById = async (req, res) => {
   const { columnId } = req.params;
   const result = await Column.findById(columnId);
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
   res.json(result);
@@ -28,7 +28,7 @@ const deleteColumn = async (req, res) => {
   const result = await Column.findByIdAndRemove(columnId);
 
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
   res.json({ message: 'Column deleted' });
@@ -40,23 +40,11 @@ const updateColumn = async (req, res) => {
     new: true,
   });
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
   res.json(result);
 };
-
-// const updateFavorite = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Task.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!result) {
-//     throw HttpError(404);
-//   }
-
-//   res.json(result);
-// };
 
 module.exports = {
   getAllColumn: ctrlWrapper(getAllColumn),
@@ -64,5 +52,4 @@ module.exports = {
   deleteColumn: ctrlWrapper(deleteColumn),
   updateColumn: ctrlWrapper(updateColumn),
   addColumn: ctrlWrapper(addColumn),
-  // updateFavorite: ctrlWrapper(updateFavorite),
 };

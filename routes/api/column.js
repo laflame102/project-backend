@@ -21,13 +21,6 @@ columnRouter.put(
   columnController.updateColumn
 );
 
-// router.patch(
-//   '/:taskId/favorite',
-//   isValidId,
-//   validateBody(schemas.updateFavoriteSchema),
-//   tasksController.updateContact
-// );
-
 columnRouter.delete('/:columnId', isValidId, columnController.deleteColumn);
 
 module.exports = columnRouter;

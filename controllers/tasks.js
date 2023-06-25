@@ -12,7 +12,7 @@ const getTaskById = async (req, res) => {
   const { taskId } = req.params;
   const result = await Task.findById(taskId);
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Task with id: ${taskId} not found`);
   }
 
   res.json(result);
@@ -28,7 +28,7 @@ const deleteTask = async (req, res) => {
   const result = await Task.findByIdAndRemove(taskId);
 
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Task with id: ${taskId} not found`);
   }
 
   res.json({ message: 'task deleted' });
@@ -40,23 +40,11 @@ const updateTask = async (req, res) => {
     new: true,
   });
   if (!result) {
-    throw HttpError(404);
+    throw HttpError(404, `Task with id: ${taskId} not found`);
   }
 
   res.json(result);
 };
-
-// const updateFavorite = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await Task.findByIdAndUpdate(contactId, req.body, {
-//     new: true,
-//   });
-//   if (!result) {
-//     throw HttpError(404);
-//   }
-
-//   res.json(result);
-// };
 
 module.exports = {
   getAllTasks: ctrlWrapper(getAllTasks),
@@ -64,5 +52,4 @@ module.exports = {
   deleteTask: ctrlWrapper(deleteTask),
   updateTask: ctrlWrapper(updateTask),
   addTask: ctrlWrapper(addTask),
-  // updateFavorite: ctrlWrapper(updateFavorite),
 };

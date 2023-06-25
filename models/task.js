@@ -1,73 +1,76 @@
 const { Schema, model } = require('mongoose');
-const Joi = require('joi');
+const Joi = require('joi').extend(require('@joi/date'));
 const { handleMongooseError } = require('../helpers');
 
-const deskSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const deskSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    ownerUser: {
+      type: String,
+      required: true,
+    },
   },
-  owner: {
-    type: String,
-    required: true,
-  },
-  // password: {
-  //   type: String,
-  //   required: true,
-  // },
-  // favorite: {
-  //   type: Boolean,
-  //   default: false,
-  // },
-});
+  { versionKey: false, timestamps: true }
+);
 
 deskSchema.post('save', handleMongooseError);
 
-const columnSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const columnSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    ownerUser: {
+      type: String,
+      required: true,
+    },
+    ownerDesk: {
+      type: String,
+      required: true,
+    },
   },
-  ownerUser: {
-    type: String,
-    required: true,
-  },
-  ownerDesk: {
-    type: String,
-    required: true,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 columnSchema.post('save', handleMongooseError);
 
-const taskSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const taskSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    ownerUser: {
+      type: String,
+      required: true,
+    },
+    ownerDesk: {
+      type: String,
+      required: true,
+    },
+    ownerColumn: {
+      type: String,
+      required: true,
+    },
+    taskValue: {
+      type: String,
+      required: true,
+    },
+    priority: {
+      type: String,
+      enum: ['without priority', 'low', 'medium', 'high'],
+      default: 'without priority',
+    },
+    deadline: {
+      type: Date,
+    },
   },
-  ownerUser: {
-    type: String,
-    required: true,
-  },
-  ownerDesk: {
-    type: String,
-    required: true,
-  },
-  ownerColumn: {
-    type: String,
-    required: true,
-  },
-  taskValue: {
-    type: String,
-  },
-  favorite: {
-    type: String,
-    default: 'Without priority',
-  },
-  deadline: {
-    type: Date,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 taskSchema.post('save', handleMongooseError);
 
@@ -93,14 +96,14 @@ const taskSchemaJoi = Joi.object({
   ownerColumn: Joi.string().required(),
   taskValue: Joi.string(),
   priority: Joi.string().default('Without priority'),
-  deadline: Joi.date(),
+  deadline: Joi.date().format('DD-MM-YYYY'),
 });
 
 const updateTaskSchemaJoi = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string(),
   taskValue: Joi.string(),
-  priority: Joi.string().default('Without priority'),
-  deadline: Joi.date(),
+  priority: Joi.string(),
+  deadline: Joi.date().format('DD-MM-YYYY'),
 });
 
 const schemas = {
