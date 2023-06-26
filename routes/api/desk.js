@@ -1,26 +1,30 @@
-const express = require('express');
+const express = require("express");
 
-const deskController = require('../../controllers/desk');
+const deskController = require("../../controllers/desk");
 
 const deskRouter = express.Router();
 
-const { schemas } = require('../../models/task');
+const { schemas } = require("../../models/task");
 
-const { validateBody, isValidId } = require('../../decorators');
+const { validateBody, isValidId } = require("../../decorators");
 
-deskRouter.get('/', deskController.getAllDesk);
+deskRouter.get("/", deskController.getAllDesk);
 
-deskRouter.get('/:deskId', isValidId, deskController.getDeskById);
+deskRouter.get("/:deskId", isValidId, deskController.getDeskById);
 
-deskRouter.post('/', validateBody(schemas.deskSchemaJoi), deskController.addDesk);
+deskRouter.post(
+  "/",
+  validateBody(schemas.deskSchemaJoi),
+  deskController.addDesk
+);
 
 deskRouter.put(
-  '/:deskId',
+  "/:deskId",
   isValidId,
   validateBody(schemas.deskSchemaJoi),
   deskController.updateDesk
 );
 
-deskRouter.delete('/:deskId', isValidId, deskController.deleteDesk);
+deskRouter.delete("/:deskId", isValidId, deskController.deleteDesk);
 
 module.exports = deskRouter;

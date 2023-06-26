@@ -1,7 +1,7 @@
-const { Desk } = require('../models/task');
+const { Desk } = require("../models/task");
 
-const { HttpError } = require('../helpers');
-const { ctrlWrapper } = require('../decorators');
+const { HttpError } = require("../helpers");
+const { ctrlWrapper } = require("../decorators");
 
 const getAllDesk = async (req, res) => {
   const result = await Desk.find();
@@ -32,7 +32,7 @@ const deleteDesk = async (req, res) => {
     throw HttpError(404, `Desk with id: ${deskId} not found`);
   }
 
-  res.json({ message: 'desk deleted' });
+  res.json({ message: "desk deleted" });
 };
 
 const updateDesk = async (req, res) => {

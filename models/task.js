@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
-const Joi = require('joi').extend(require('@joi/date'));
-const { handleMongooseError } = require('../helpers');
+const { Schema, model } = require("mongoose");
+const Joi = require("joi").extend(require("@joi/date"));
+const { handleMongooseError } = require("../helpers");
 
 const deskSchema = new Schema(
   {
@@ -16,7 +16,7 @@ const deskSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-deskSchema.post('save', handleMongooseError);
+deskSchema.post("save", handleMongooseError);
 
 const columnSchema = new Schema(
   {
@@ -36,7 +36,7 @@ const columnSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-columnSchema.post('save', handleMongooseError);
+columnSchema.post("save", handleMongooseError);
 
 const taskSchema = new Schema(
   {
@@ -62,8 +62,8 @@ const taskSchema = new Schema(
     },
     priority: {
       type: String,
-      enum: ['without priority', 'low', 'medium', 'high'],
-      default: 'without priority',
+      enum: ["without priority", "low", "medium", "high"],
+      default: "without priority",
     },
     deadline: {
       type: Date,
@@ -72,7 +72,7 @@ const taskSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-taskSchema.post('save', handleMongooseError);
+taskSchema.post("save", handleMongooseError);
 
 const deskSchemaJoi = Joi.object({
   title: Joi.string().required(),
@@ -95,15 +95,15 @@ const taskSchemaJoi = Joi.object({
   ownerDesk: Joi.string().required(),
   ownerColumn: Joi.string().required(),
   taskValue: Joi.string(),
-  priority: Joi.string().default('Without priority'),
-  deadline: Joi.date().format('DD-MM-YYYY'),
+  priority: Joi.string().default("Without priority"),
+  deadline: Joi.date().format("DD-MM-YYYY"),
 });
 
 const updateTaskSchemaJoi = Joi.object({
   title: Joi.string(),
   taskValue: Joi.string(),
   priority: Joi.string(),
-  deadline: Joi.date().format('DD-MM-YYYY'),
+  deadline: Joi.date().format("DD-MM-YYYY"),
 });
 
 const schemas = {
@@ -114,8 +114,8 @@ const schemas = {
   updateTaskSchemaJoi,
 };
 
-const Desk = model('desk', deskSchema);
-const Column = model('column', columnSchema);
-const Task = model('task', taskSchema);
+const Desk = model("desk", deskSchema);
+const Column = model("column", columnSchema);
+const Task = model("task", taskSchema);
 
 module.exports = { Task, Column, Desk, schemas };

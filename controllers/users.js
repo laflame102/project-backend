@@ -8,7 +8,7 @@ const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  const hashPassword = await bcrypt.hash(password, 10);;
+  const hashPassword = await bcrypt.hash(password, 10);
 
   if (user) {
     throw HttpError(409, "Email already in use");
@@ -40,16 +40,18 @@ const login = async (req, res) => {
 
   const payload = {
     id: user._id,
-  }
+  };
 
   const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: "23h" });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: "23h",
+  });
   await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
   res.status(201).json({
     accessToken,
     refreshToken,
-  })
+  });
 };
 
 const refresh = async (req, res) => {
@@ -59,14 +61,16 @@ const refresh = async (req, res) => {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
     const isExist = await User.findOne({ refreshToken: token });
     if (!isExist) {
-      throw HttpError(403, 'invalid token')
+      throw HttpError(403, "invalid token");
     }
     const payload = {
       id,
     };
-  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(id, { accessToken, refreshToken });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+      expiresIn: "23h",
+    });
+    await User.findByIdAndUpdate(id, { accessToken, refreshToken });
 
     res.status(200).json({
       accessToken,
@@ -88,6 +92,14 @@ const getCurrent = async (req, res) => {
     avatarURL,
     theme,
   });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { accessToken: "" });
+
+  res.status(204).end();
 };
 
 const theme = async (req, res) => {
@@ -115,11 +127,17 @@ const help = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   refresh: ctrlWrapper(refresh),
   getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
   theme: ctrlWrapper(theme),
   help: ctrlWrapper(help),
 };

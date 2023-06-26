@@ -14,7 +14,7 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const sendEmail = async ({to, subject, html}) => {
+const sendEmail = async ({ to, subject, html }) => {
   const email = {
     from: META_EMAIL,
     fromName: "TaskPro support team",
