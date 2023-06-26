@@ -21,7 +21,7 @@ app.use("/api/desk", deskRouter);
 app.use("/api/columns", columnRouter);
 app.use("/api/tasks", tasksRouter);
 
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
 });
 

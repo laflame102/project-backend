@@ -127,9 +127,7 @@ const help = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {
-  
-};
+const updateAvatar = async (req, res) => {};
 
 module.exports = {
   register: ctrlWrapper(register),
