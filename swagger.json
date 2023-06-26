@@ -1,0 +1,495 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Tasks Base",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Tasks API"
+    },
+    {
+      "name": "Tasks API/User"
+    },
+    {
+      "name": "Tasks API/Desks"
+    }
+  ],
+  "paths": {
+    "/desk/{deskID}": {
+      "get": {
+        "summary": "desk/{deskID}",
+        "x-apidog-folder": "Tasks API/Desks",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/Desks"],
+        "parameters": [
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "Отримання дошки за ID",
+            "required": true,
+            "example": "64980586a9e98b553d767786",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839854-run"
+      }
+    },
+    "/desk/": {
+      "get": {
+        "summary": "desk/",
+        "x-apidog-folder": "Tasks API/Desks",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/Desks"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839856-run"
+      }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "Registration new user",
+        "x-apidog-folder": "Tasks API/User",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/User"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "New user name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "New user email",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "New user password",
+                    "minLength": 8,
+                    "maxLength": 64
+                  }
+                },
+                "x-apidog-orders": ["name", "email", "password"],
+                "required": ["name", "email", "password"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "name": "John Dow",
+                "email": "jonDow@com.ua",
+                "password": "12345678"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "name": "John Dow",
+                      "email": "jonDow@com.ua"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Email already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Email is already use",
+                    "value": {
+                      "message": "Email already in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839927-run"
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login user",
+        "x-apidog-folder": "Tasks API/User",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/User"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Users email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "description": "User password"
+                  }
+                },
+                "x-apidog-orders": ["email", "password"],
+                "required": ["email", "password"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "email": "jonDow2@com.ua",
+                "password": "12345678"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Authorisation success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjI3OCwiZXhwIjoxNjg3ODc5MDc4fQ.XvkrfJLn6rm25Q-fkK4RWFAQLyeixw5wRalg_62a6KQ",
+                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjI3OCwiZXhwIjoxNjg3ODc5MDc4fQ.nXiWIbmxwA7VLrNVRpNDuysDry7gUQSZkVnubgHvGjs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Email or password is wrong"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839963-run"
+      }
+    },
+    "/users/refresh": {
+      "post": {
+        "summary": "Refresh token",
+        "x-apidog-folder": "Tasks API/User",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/User"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string"
+                  }
+                },
+                "x-apidog-orders": ["refreshToken"],
+                "required": ["refreshToken"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjY5NCwiZXhwIjoxNjg3ODc5NDk0fQ.I4-zha7OYaiqMs3RNaJ9XRX6c32UznldEn5ZvtuST98"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5Njk1MiwiZXhwIjoxNjg3ODc5NzUyfQ.ayuEfeXhl9Y5Wj9HpT5UIipfAOxkePpuLvFfu3C6-rA",
+                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5Njk1MiwiZXhwIjoxNjg3ODc5NzUyfQ.wtS-9B8nHzQE1QfXv51s1a6JccGm4kK2mHp9WRN1hEg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Exception",
+                    "value": {
+                      "message": "invalid token"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3840922-run"
+      }
+    },
+    "/users/current": {
+      "get": {
+        "summary": "Current",
+        "x-apidog-folder": "Tasks API/User",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Tasks API/User"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "name": "John Dow2",
+                      "email": "jonDow2@com.ua",
+                      "avatarURL": "",
+                      "theme": "dark"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Exception",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3840929-run"
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  },
+  "servers": [{ "url": "http://localhost:3000/api", "description": "Development" }]
+}
