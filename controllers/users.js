@@ -97,6 +97,21 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const updateProfile = async (req, res) => {
+  const { id } = req.user;
+  const { password } = req.body;
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const result = await User.findByIdAndUpdate(id, { ...req.body, password: hashPassword }, { new: true });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json({
+    name: result.name,
+    email: result.email,
+  })
+};
+
 const logout = async (req, res) => {
   const { _id } = req.user;
 
@@ -159,6 +174,7 @@ module.exports = {
   login: ctrlWrapper(login),
   refresh: ctrlWrapper(refresh),
   getCurrent: ctrlWrapper(getCurrent),
+  updateProfile: ctrlWrapper(updateProfile),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   theme: ctrlWrapper(theme),
