@@ -1,30 +1,32 @@
-const express = require("express");
+const express = require('express');
 
-const columnController = require("../../controllers/column");
+const columnController = require('../../controllers/column');
 
 const columnRouter = express.Router();
 
-const { schemas } = require("../../models/task");
+const { schemas } = require('../../models/task');
 
-const { validateBody, isValidId } = require("../../decorators");
+const { validateBody, authenticate, isValidId } = require('../../decorators');
 
-columnRouter.get("/", columnController.getAllColumn);
+columnRouter.get('/', authenticate, columnController.getAllColumn);
 
-columnRouter.get("/:columnId", isValidId, columnController.getColumnById);
+columnRouter.get('/:columnId', authenticate, isValidId, columnController.getColumnById);
 
 columnRouter.post(
-  "/",
+  '/',
+  authenticate,
   validateBody(schemas.columnSchemaJoi),
   columnController.addColumn
 );
 
-columnRouter.put(
-  "/:columnId",
+columnRouter.patch(
+  '/:columnId',
   isValidId,
+  authenticate,
   validateBody(schemas.columnSchemaJoi),
   columnController.updateColumn
 );
 
-columnRouter.delete("/:columnId", isValidId, columnController.deleteColumn);
+columnRouter.delete('/:columnId', isValidId, columnController.deleteColumn);
 
 module.exports = columnRouter;
