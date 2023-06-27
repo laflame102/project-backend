@@ -58,7 +58,11 @@ const login = async (req, res) => {
 };
 
 const refresh = async (req, res) => {
-  const { refreshToken: token } = req.body;
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
+  if (bearer !== "Bearer") {
+    next(HttpError(401));
+  }
 
   try {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
