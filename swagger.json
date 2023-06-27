@@ -7,24 +7,30 @@
   },
   "tags": [
     {
-      "name": "Tasks API"
+      "name": "Задачи API"
     },
     {
-      "name": "Tasks API/User"
+      "name": "Задачи API/Робота з користувачем"
     },
     {
-      "name": "Tasks API/Desks"
+      "name": "Задачи API/Робота з дошками"
+    },
+    {
+      "name": "Задачи API/Робота з колонками"
+    },
+    {
+      "name": "Задачи API/Рбота з задачами"
     }
   ],
   "paths": {
     "/desk/{deskID}": {
       "get": {
-        "summary": "desk/{deskID}",
-        "x-apidog-folder": "Tasks API/Desks",
+        "summary": "Отримання однієї дошки за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
         "x-apidog-status": "developing",
         "deprecated": false,
-        "description": "",
-        "tags": ["Tasks API/Desks"],
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
         "parameters": [
           {
             "name": "deskID",
@@ -86,17 +92,119 @@
           }
         },
         "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839854-run"
-      }
-    },
-    "/desk/": {
-      "get": {
-        "summary": "desk/",
-        "x-apidog-folder": "Tasks API/Desks",
+      },
+      "patch": {
+        "summary": "Редагування назви дошки за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
         "x-apidog-status": "developing",
         "deprecated": false,
-        "description": "",
-        "tags": ["Tasks API/Desks"],
-        "parameters": [],
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
+        "parameters": [
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "ID дошки для зміни назви",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "x-apidog-orders": ["title"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "title": "new title"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843278-run"
+      },
+      "delete": {
+        "summary": "Видалення дошки за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
+        "parameters": [
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "ID дошки для видалення",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843281-run"
+      }
+    },
+    "/desk/{userID}": {
+      "get": {
+        "summary": "Отримання всіх дошок користувача",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "ID користувача, за яким сортуються дошки",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -148,15 +256,87 @@
         "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839856-run"
       }
     },
+    "/desk/:deskId/background": {
+      "patch": {
+        "summary": "Зміна бекграунду дошки",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
+        "parameters": [
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "ID дошки, за яким змінюється бекграунд дошки",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "x-apidog-orders": ["title"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "background": "new background"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "OK"
+              }
+            }
+          },
+          "examples": {
+            "1": {
+              "summary": "OK",
+              "value": [
+                {
+                  "message": "OK"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "/users/register": {
       "post": {
-        "summary": "Registration new user",
-        "x-apidog-folder": "Tasks API/User",
+        "summary": "Регістрація нового користувача",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Tasks API/User"],
-        "parameters": [],
+        "tags": ["Задачи API/Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "New user name",
+            "required": true,
+            "example": "asdasda",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -267,12 +447,12 @@
     },
     "/users/login": {
       "post": {
-        "summary": "Login user",
-        "x-apidog-folder": "Tasks API/User",
+        "summary": "Авторизація (логін) користувача",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Tasks API/User"],
+        "tags": ["Задачи API/Робота з користувачем"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -352,31 +532,24 @@
       }
     },
     "/users/refresh": {
-      "post": {
-        "summary": "Refresh token",
-        "x-apidog-folder": "Tasks API/User",
+      "get": {
+        "summary": "Оновлення токену",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
         "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Tasks API/User"],
+        "tags": ["Задачи API/Робота з користувачем"],
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {
-                  "refreshToken": {
-                    "type": "string"
-                  }
-                },
-                "x-apidog-orders": ["refreshToken"],
-                "required": ["refreshToken"],
+                "properties": {},
+                "x-apidog-orders": [],
                 "x-apidog-ignore-properties": []
               },
-              "example": {
-                "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjY5NCwiZXhwIjoxNjg3ODc5NDk0fQ.I4-zha7OYaiqMs3RNaJ9XRX6c32UznldEn5ZvtuST98"
-              }
+              "example": ""
             }
           }
         },
@@ -430,13 +603,26 @@
     },
     "/users/current": {
       "get": {
-        "summary": "Current",
-        "x-apidog-folder": "Tasks API/User",
+        "summary": "Інформація про поточного користувача",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
         "x-apidog-status": "developing",
         "deprecated": false,
-        "description": "",
-        "tags": ["Tasks API/User"],
-        "parameters": [],
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzg4MDYyOCwiZXhwIjoxNjg3OTYzNDI4fQ.SmhEqGINLTlkGi4YyS6Id1zkXIVJyKDuelE6ImpR9W8",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "headers": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzg4MDYyOCwiZXhwIjoxNjg3OTYzNDI4fQ.SmhEqGINLTlkGi4YyS6Id1zkXIVJyKDuelE6ImpR9W8",
+        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "OK",
@@ -486,10 +672,723 @@
         },
         "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3840929-run"
       }
+    },
+    "/column/{deskID}": {
+      "get": {
+        "summary": "Отримання всіх колонок однієї дошки",
+        "x-apidog-folder": "Задачи API/Робота з колонками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Задачи API/Робота з колонками"],
+        "parameters": [
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "ID дошки, за якою здійснюється фільтрування колонок",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842870-run"
+      }
+    },
+    "/column/{columnID}": {
+      "get": {
+        "summary": "Отримання однієї колонки за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з колонками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з колонками"],
+        "parameters": [
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колонки для пошуку",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842871-run"
+      }
+    },
+    "/tasks/{columnID}": {
+      "get": {
+        "summary": "Отримання всіх задач по ID колонки",
+        "x-apidog-folder": "Задачи API/Рбота з задачами",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Рбота з задачами"],
+        "parameters": [
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колонки для пошуку пов'язаних з нею задань",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842952-run"
+      }
+    },
+    "/tasks/{taskID}": {
+      "get": {
+        "summary": "Отримання однієї задачі по ID Copy",
+        "x-apidog-folder": "Задачи API/Рбота з задачами",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Рбота з задачами"],
+        "parameters": [
+          {
+            "name": "taskID",
+            "in": "path",
+            "description": "ID таски для пошуку",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    },
+                    "x-apidog-ignore-properties": [],
+                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843282-run"
+      },
+      "patch": {
+        "summary": "Редагування задачі за ії ID",
+        "x-apidog-folder": "Задачи API/Рбота з задачами",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Рбота з задачами"],
+        "parameters": [
+          {
+            "name": "taskID",
+            "in": "path",
+            "description": "ID задачи за якою треба внести зміни",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "taskValue": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "deadline": {
+                    "type": "string"
+                  }
+                },
+                "x-apidog-orders": ["title", "taskValue", "priority", "deadline"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "title": "new title",
+                "taskValue": "new value",
+                "priority": "medium",
+                "deadline": "12-12-1212"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843184-run"
+      },
+      "delete": {
+        "summary": "Видалення задачі за ії ID",
+        "x-apidog-folder": "Задачи API/Рбота з задачами",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Рбота з задачами"],
+        "parameters": [
+          {
+            "name": "taskID",
+            "in": "path",
+            "description": "ID задачи для видалення",
+            "required": true,
+            "example": "{% faker address.buildingNumber %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843195-run"
+      }
+    },
+    "/tasks": {
+      "post": {
+        "summary": "Створення нової дошки",
+        "x-apidog-folder": "Задачи API/Робота з дошками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з дошками"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Заголовок задачи"
+                  },
+                  "ownerUser": {
+                    "type": "string",
+                    "description": "ID користувача власника"
+                  }
+                },
+                "x-apidog-orders": ["title", "ownerUser"],
+                "required": ["title", "ownerUser"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "title": "Test task 3",
+                "ownerUser": "{user ID}"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843277-run"
+      }
+    },
+    "/columns/{columnID}": {
+      "patch": {
+        "summary": "Редагування назви колонки за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з колонками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з колонками"],
+        "parameters": [
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колонки для редагування",
+            "required": true,
+            "example": "{% faker database.collation %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "x-apidog-orders": ["title"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "title": "new title"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843273-run"
+      },
+      "delete": {
+        "summary": "Видалення задачі за ії ID",
+        "x-apidog-folder": "Задачи API/Робота з колонками",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з колонками"],
+        "parameters": [
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колоки для видалення",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843276-run"
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "Вихід (логаут) користувача",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "name": "John Dow2",
+                      "email": "jonDow2@com.ua",
+                      "avatarURL": "",
+                      "theme": "dark"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Exception",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843283-run"
+      }
+    },
+    "/theme": {
+      "patch": {
+        "summary": "Зміна теми користувача",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з користувачем"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "description": "Назва теми з доступних: (\"dark\", \"light\", \"violet\")"
+                  }
+                },
+                "x-apidog-orders": ["theme"],
+                "required": ["theme"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "theme": "light"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843369-run"
+      }
+    },
+    "/help": {
+      "post": {
+        "summary": "Запит допомоги",
+        "x-apidog-folder": "Задачи API/Робота з користувачем",
+        "x-apidog-status": "developing",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Задачи API/Робота з користувачем"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Пошта користувача"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "Комментар користувача"
+                  }
+                },
+                "x-apidog-orders": ["email", "comment"],
+                "required": ["email", "comment"],
+                "x-apidog-ignore-properties": []
+              },
+              "example": {
+                "email": "123131@com",
+                "comment": "Help me please!!!  HELP! HELP! HELP!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843377-run"
+      }
     }
   },
   "components": {
     "schemas": {}
   },
-  "servers": [{ "url": "http://localhost:3000/api", "description": "Development" }]
+  "securitySchemes": {
+    "Bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "servers": [
+    { "url": "http://localhost:3000", "description": "Development" },
+    { "url": "https://tasks-backed.onrender.com/api/", "description": "Production" }
+  ]
 }

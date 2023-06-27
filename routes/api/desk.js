@@ -1,30 +1,35 @@
-const express = require("express");
+const express = require('express');
 
-const deskController = require("../../controllers/desk");
+const deskController = require('../../controllers/desk');
 
 const deskRouter = express.Router();
 
-const { schemas } = require("../../models/task");
+const { schemas } = require('../../models/task');
 
-const { validateBody, isValidId } = require("../../decorators");
+const { validateBody, authenticate, isValidId } = require('../../decorators');
 
-deskRouter.get("/", deskController.getAllDesk);
+deskRouter.get('/', authenticate, deskController.getAllDesk);
 
-deskRouter.get("/:deskId", isValidId, deskController.getDeskById);
+deskRouter.get('/:deskId', authenticate, isValidId, deskController.getDeskById);
 
-deskRouter.post(
-  "/",
-  validateBody(schemas.deskSchemaJoi),
-  deskController.addDesk
-);
+deskRouter.post('/', authenticate, validateBody(schemas.deskSchemaJoi), deskController.addDesk);
 
-deskRouter.put(
-  "/:deskId",
+deskRouter.patch(
+  '/:deskId',
   isValidId,
+  authenticate,
   validateBody(schemas.deskSchemaJoi),
   deskController.updateDesk
 );
 
-deskRouter.delete("/:deskId", isValidId, deskController.deleteDesk);
+deskRouter.patch(
+  '/:deskId/background',
+  isValidId,
+  authenticate,
+  validateBody(schemas.updateDeskBGSchemaJoi),
+  deskController.updateDesk
+);
+
+deskRouter.delete('/:deskId', authenticate, isValidId, deskController.deleteDesk);
 
 module.exports = deskRouter;
