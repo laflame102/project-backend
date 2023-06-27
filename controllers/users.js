@@ -1,10 +1,12 @@
-const { User } = require("../models/user");
-const { HttpError, sendEmail } = require("../helpers");
-const { ctrlWrapper } = require("../decorators");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env; 
+const bcrypt = require("bcrypt");
+const fs = require("fs/promises");
 
+const { User } = require("../models/user");
+const { HttpError, sendEmail, cloudinary } = require("../helpers");
+const { ctrlWrapper } = require("../decorators");
+
+const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -128,7 +130,29 @@ const help = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {};
+const updateAvatar = async (req, res) => {
+  const { path: oldPath } = req.file;
+  console.log(oldPath);
+  const fileData = await cloudinary.uploader.upload(oldPath, {
+    folder: "avatars",
+  });
+
+  console.log(fileData);
+
+  await fs.unlink(oldPath);
+  const { _id: owner } = req.user;
+  const result = await User.findByIdAndUpdate(
+    owner,
+    { ...req.body, avatarURL: fileData.url },
+    { new: true }
+  );
+
+  if (!result) {
+    throw HttpError(404, `User with id=${owner} not found`);
+  }
+
+  res.json(result.avatarURL);
+};
 
 module.exports = {
   register: ctrlWrapper(register),
