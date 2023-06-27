@@ -9,7 +9,7 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
-router.get("/refresh", validateBody(schemas.refreshTokenSchema), ctrl.refresh);
+router.get("/refresh",  authenticate, ctrl.refresh);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
