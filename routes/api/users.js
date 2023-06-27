@@ -13,6 +13,8 @@ router.get("/refresh", validateBody(schemas.refreshTokenSchema), ctrl.refresh);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
+router.put("/update",authenticate,validateBody(schemas.updateProfileSchema),ctrl.updateProfile);
+
 router.post("/logout", authenticate, ctrl.logout);
 
 router.patch(
