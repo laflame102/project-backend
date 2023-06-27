@@ -3,7 +3,8 @@ const { HttpError, sendEmail } = require("../helpers");
 const { ctrlWrapper } = require("../decorators");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
+const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env; 
+
 
 const register = async (req, res) => {
   const { email, password } = req.body;
