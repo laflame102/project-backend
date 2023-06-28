@@ -1,10 +1,11 @@
-const { Desk } = require("../models/task");
+const { Desk } = require('../models/task');
 
-const { HttpError } = require("../helpers");
-const { ctrlWrapper } = require("../decorators");
+const { HttpError } = require('../helpers');
+const { ctrlWrapper } = require('../decorators');
 
 const getAllDesk = async (req, res) => {
-  const result = await Desk.find();
+  const { _id: ownerUser } = req.user;
+  const result = await Desk.find({ ownerUser });
   res.json(result);
 };
 
@@ -12,7 +13,7 @@ const getDeskById = async (req, res) => {
   const { deskId } = req.params;
 
   const result = await Desk.findById(deskId);
-  console.log(result);
+
   if (!result) {
     throw HttpError(404, `Desk with id: ${deskId} not found`);
   }
@@ -32,7 +33,7 @@ const deleteDesk = async (req, res) => {
     throw HttpError(404, `Desk with id: ${deskId} not found`);
   }
 
-  res.json({ message: "desk deleted" });
+  res.json({ message: 'desk deleted' });
 };
 
 const updateDesk = async (req, res) => {

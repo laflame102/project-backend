@@ -1,10 +1,11 @@
-const { Column } = require("../models/task");
+const { Column } = require('../models/task');
 
-const { HttpError } = require("../helpers");
-const { ctrlWrapper } = require("../decorators");
+const { HttpError } = require('../helpers');
+const { ctrlWrapper } = require('../decorators');
 
 const getAllColumn = async (req, res) => {
-  const result = await Column.find();
+  const { ownerDesk } = req.query;
+  const result = await Column.find({ ownerDesk });
   res.json(result);
 };
 
@@ -31,7 +32,7 @@ const deleteColumn = async (req, res) => {
     throw HttpError(404, `Column with id: ${columnId} not found`);
   }
 
-  res.json({ message: "Column deleted" });
+  res.json({ message: 'Column deleted' });
 };
 
 const updateColumn = async (req, res) => {

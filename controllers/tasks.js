@@ -1,10 +1,11 @@
-const { Task } = require("../models/task");
+const { Task } = require('../models/task');
 
-const { HttpError } = require("../helpers");
-const { ctrlWrapper } = require("../decorators");
+const { HttpError } = require('../helpers');
+const { ctrlWrapper } = require('../decorators');
 
 const getAllTasks = async (req, res) => {
-  const result = await Task.find();
+  const { ownerColumn } = req.query;
+  const result = await Task.find({ ownerColumn });
   res.json(result);
 };
 
@@ -31,7 +32,7 @@ const deleteTask = async (req, res) => {
     throw HttpError(404, `Task with id: ${taskId} not found`);
   }
 
-  res.json({ message: "task deleted" });
+  res.json({ message: 'task deleted' });
 };
 
 const updateTask = async (req, res) => {
