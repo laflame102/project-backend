@@ -49,7 +49,7 @@ const login = async (req, res) => {
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "23h",
   });
-  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
+  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken});
 
   res.status(201).json({
     accessToken,
@@ -91,7 +91,7 @@ const refresh = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { name, email, id, avatarURL, theme } = req.user;
 
-  console.log("req.user -->", req.user.id);
+  // console.log("req.user -->", req.user.id);
 
   res.status(200).json({
     name,
