@@ -54,6 +54,13 @@ const login = async (req, res) => {
   res.status(201).json({
     accessToken,
     refreshToken,
+    user: {
+      name: user.name,
+      email: user.email,
+      id: user._id,
+      avatarURL: user.avatarURL,
+      theme: user.theme,
+    }
   });
 };
 
