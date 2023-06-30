@@ -12,6 +12,10 @@ const deskSchema = new Schema(
       type: String,
       required: true,
     },
+     icon: {
+      type: String,
+      required: true,
+    },
     background: {
       type: String,
     },
@@ -80,6 +84,7 @@ taskSchema.post('save', handleMongooseError);
 const deskSchemaJoi = Joi.object({
   title: Joi.string().required(),
   ownerUser: Joi.string().required(),
+  icon: Joi.string().required(),
   background: Joi.string(),
 });
 
