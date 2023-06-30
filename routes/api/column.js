@@ -23,7 +23,7 @@ columnRouter.patch(
   '/:columnId',
   isValidId,
   authenticate,
-  validateBody(schemas.columnSchemaJoi),
+  validateBody(schemas.updateColumnSchemaJoi),
   columnController.updateColumn
 );
 

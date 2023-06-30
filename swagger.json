@@ -2,40 +2,48 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Tasks Base",
-    "description": "",
-    "version": "1.0.0"
+    "description": "Цю документацію створено для забезпечення взаємодії Frontend та Backend розробників у процесі створення цього додатку. </BR> </BR> Нижче прописані основні шляхи до серверу Backend, параметри запитів та варіанти відповідей серверу. </BR></BR>Також можна спробувати запити за допомогою інтерактивних прикладів. </BR></BR>Для забезпечення цього потрібно вибрати сервер, після цьго натиснути кнопку Autorize або на іконку с замком навпроти кожного приклада та ввести діючий Bearer Token у відповідному полі. </BR></BR>Enjoy!",
+    "version": "2.2.19",
+    "contact": {
+      "name": "Вихідний код проекту",
+      "url": "https://github.com/laflame102/project-backend"
+    }
   },
+
   "tags": [
     {
-      "name": "Задачи API"
+      "name": "Робота з користувачем"
     },
     {
-      "name": "Задачи API/Робота з користувачем"
+      "name": "Робота з дошками"
     },
     {
-      "name": "Задачи API/Робота з дошками"
+      "name": "Робота з колонками"
     },
     {
-      "name": "Задачи API/Робота з колонками"
-    },
-    {
-      "name": "Задачи API/Рбота з задачами"
+      "name": "Робота з завданнями"
     }
   ],
+
   "paths": {
     "/desk/{deskID}": {
       "get": {
         "summary": "Отримання однієї дошки за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
+        "tags": ["Робота з дошками"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "deskID",
             "in": "path",
-            "description": "Отримання дошки за ID",
+            "description": "Передаємо ID дошки за яким потрібно зробити пошук",
             "required": true,
             "example": "64980586a9e98b553d767786",
             "schema": {
@@ -68,9 +76,7 @@
                       "updatedAt": {
                         "type": "string"
                       }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                    }
                   }
                 },
                 "examples": {
@@ -89,24 +95,56 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Виникає при відсутності в базі дошки із вказаним ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Not found",
+                    "value": [
+                      {
+                        "message": "Desk with id: {deskId} not found"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839854-run"
+        }
       },
       "patch": {
         "summary": "Редагування назви дошки за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
+        "tags": ["Робота з дошками"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "deskID",
             "in": "path",
             "description": "ID дошки для зміни назви",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": "2131313134313246",
             "schema": {
               "type": "string"
             }
@@ -121,9 +159,7 @@
                   "title": {
                     "type": "string"
                   }
-                },
-                "x-apidog-orders": ["title"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "title": "new title"
@@ -133,35 +169,67 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843278-run"
+        }
       },
       "delete": {
         "summary": "Видалення дошки за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
+        "tags": ["Робота з дошками"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "deskID",
             "in": "path",
             "description": "ID дошки для видалення",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": "31366131346131354651",
             "schema": {
               "type": "string"
             }
@@ -174,35 +242,214 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "ОК",
+                    "value": {
+                      "message": "desk deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Desk with id: ${deskId} not found, якщо немає дошки з цим ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Desk with id: ${deskId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843281-run"
+        }
       }
     },
-    "/desk/{userID}": {
-      "get": {
-        "summary": "Отримання всіх дошок користувача",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
+    "/desk": {
+      "post": {
+        "summary": "Створення нової дошки",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
+        "tags": ["Робота з дошками"],
         "parameters": [
           {
-            "name": "userID",
-            "in": "path",
-            "description": "ID користувача, за яким сортуються дошки",
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
             "required": true,
-            "example": "{% faker database.collation %}",
-            "schema": {
-              "type": "string"
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "description": "Заголовок дошки",
+            "required": true,
+            "example": "Нова дошка"
+          },
+          {
+            "name": "ownerUser",
+            "in": "body",
+            "description": "ID Користувача власника дошки",
+            "required": true,
+            "example": "ID користувача власника"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Заголовок дошки"
+                  },
+                  "ownerUser": {
+                    "type": "string",
+                    "description": "ID користувача власника"
+                  }
+                }
+              },
+              "example": {
+                "title": "TNew desk 1",
+                "ownerUser": "ID користувача власника"
+              }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "title": "Tru-tu-tu",
+                      "ownerUser": "6499ddcf3888df7fc9af9c64",
+                      "_id": "649c75972f54b861ddd4420b",
+                      "createdAt": "2023-06-28T18:01:59.574Z",
+                      "updatedAt": "2023-06-28T18:01:59.574Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "get": {
+        "summary": "Отримання всіх дошок користувача",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з дошками"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
           }
         ],
         "responses": {
@@ -230,9 +477,7 @@
                       "updatedAt": {
                         "type": "string"
                       }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                    }
                   }
                 },
                 "examples": {
@@ -245,32 +490,99 @@
                         "ownerUser": "first user ID",
                         "createdAt": "2023-06-25T09:14:46.374Z",
                         "updatedAt": "2023-06-25T09:14:46.374Z"
+                      },
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      },
+                      {
+                        "_id": "64980586a9e98b553d767786",
+                        "title": "Test#1 desk",
+                        "ownerUser": "first user ID",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
                       }
                     ]
                   }
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839856-run"
+        }
       }
     },
     "/desk/:deskId/background": {
       "patch": {
         "summary": "Зміна бекграунду дошки",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
+
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
+        "tags": ["Робота з дошками"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "deskID",
             "in": "path",
             "description": "ID дошки, за яким змінюється бекграунд дошки",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": "56461321654613216465",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "background",
+            "in": "path",
+            "description": "посилання на бекграунд",
+            "required": true,
+            "example": "посилання на бекграунд",
             "schema": {
               "type": "string"
             }
@@ -282,12 +594,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "title": {
+                  "background": {
                     "type": "string"
                   }
-                },
-                "x-apidog-orders": ["title"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "background": "new background"
@@ -297,21 +607,44 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
             "content": {
               "application/json": {
-                "message": "OK"
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
               }
             }
           },
-          "examples": {
-            "1": {
-              "summary": "OK",
-              "value": [
-                {
-                  "message": "OK"
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
-              ]
+              }
             }
           }
         }
@@ -320,21 +653,30 @@
     "/users/register": {
       "post": {
         "summary": "Регістрація нового користувача",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Задачи API/Робота з користувачем"],
+        "tags": ["Робота з користувачем"],
         "parameters": [
           {
             "name": "name",
-            "in": "query",
-            "description": "New user name",
+            "in": "body",
+            "description": "Ім'я нового користувача",
             "required": true,
-            "example": "asdasda",
-            "schema": {
-              "type": "string"
-            }
+            "example": "John Dow"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Електронна пошта нового користувача",
+            "required": true,
+            "example": "jonDow@com.ua"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Пароль нового користувача (Мінімум - 8, максимум - 64 символи)",
+            "required": true,
+            "example": "asdfasdf"
           }
         ],
         "requestBody": {
@@ -359,14 +701,13 @@
                     "maxLength": 64
                   }
                 },
-                "x-apidog-orders": ["name", "email", "password"],
-                "required": ["name", "email", "password"],
-                "x-apidog-ignore-properties": []
+
+                "required": ["name", "email", "password"]
               },
               "example": {
                 "name": "John Dow",
                 "email": "jonDow@com.ua",
-                "password": "12345678"
+                "password": "asdfasdf"
               }
             }
           }
@@ -378,9 +719,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
@@ -395,33 +734,45 @@
             }
           },
           "400": {
-            "description": "Missing fields",
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
                 }
               }
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Not found - Виникає при помилці в адресі запиту",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
                 }
               }
             }
           },
           "409": {
-            "description": "Conflict - Email already in use",
+            "description": "Conflict - Email already in use - Виникає якщо вказаний email вже зареєстрований в базі",
             "content": {
               "application/json": {
                 "schema": {
@@ -441,19 +792,31 @@
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839927-run"
+        }
       }
     },
     "/users/login": {
       "post": {
         "summary": "Авторизація (логін) користувача",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Задачи API/Робота з користувачем"],
-        "parameters": [],
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Електронна пошта користувача",
+            "required": true,
+            "example": "jonDow@com.ua"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Пароль користувача (Мінімум - 8, максимум - 64 символи)",
+            "required": true,
+            "example": "asdfasdf"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -471,35 +834,37 @@
                     "maxLength": 64,
                     "description": "User password"
                   }
-                },
-                "x-apidog-orders": ["email", "password"],
-                "required": ["email", "password"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "email": "jonDow2@com.ua",
-                "password": "12345678"
+                "password": "asdfasdf"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Authorisation success",
+            "description": "Authorisation success - при успішному логіні користувача видаються токени та дані про користувача",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
                     "summary": "Success",
                     "value": {
                       "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjI3OCwiZXhwIjoxNjg3ODc5MDc4fQ.XvkrfJLn6rm25Q-fkK4RWFAQLyeixw5wRalg_62a6KQ",
-                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjI3OCwiZXhwIjoxNjg3ODc5MDc4fQ.nXiWIbmxwA7VLrNVRpNDuysDry7gUQSZkVnubgHvGjs"
+                      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzc5NjI3OCwiZXhwIjoxNjg3ODc5MDc4fQ.nXiWIbmxwA7VLrNVRpNDuysDry7gUQSZkVnubgHvGjs",
+                      "user": {
+                        "name": "John Dow",
+                        "email": "jonDow2@com.ua",
+                        "id": "user._id",
+                        "avatarURL": "",
+                        "theme": "dark"
+                      }
                     }
                   }
                 }
@@ -507,7 +872,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Unauthorized - виникає якщо не передати токен, або Email or password is wrong - при невірному введенні логіну чи паролю",
             "content": {
               "application/json": {
                 "schema": {
@@ -520,49 +885,57 @@
                   "1": {
                     "summary": "Unauthorized",
                     "value": {
+                      "message": "Unauthorized"
+                    }
+                  },
+                  "2": {
+                    "summary": "Email or password is wrong",
+                    "value": {
                       "message": "Email or password is wrong"
                     }
                   }
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3839963-run"
+        }
       }
     },
     "/users/refresh": {
       "get": {
         "summary": "Оновлення токену",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Задачи API/Робота з користувачем"],
+        "tags": ["Робота з користувачем"],
         "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {},
-                "x-apidog-orders": [],
-                "x-apidog-ignore-properties": []
-              },
-              "example": ""
-            }
-          }
-        },
+
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK - при успішному оновленні токену",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
@@ -577,14 +950,12 @@
             }
           },
           "403": {
-            "description": "Invalid token",
+            "description": "Invalid token - при передачі невірного токену",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
@@ -596,33 +967,44 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3840922-run"
+        }
       }
     },
     "/users/current": {
       "get": {
         "summary": "Інформація про поточного користувача",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з користувачем"],
+        "tags": ["Робота з користувачем"],
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "description": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzg4MDYyOCwiZXhwIjoxNjg3OTYzNDI4fQ.SmhEqGINLTlkGi4YyS6Id1zkXIVJyKDuelE6ImpR9W8",
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
             "required": true,
-            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg",
-            "schema": {
-              "type": "string"
-            }
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
           }
         ],
-        "headers": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTliNTQ2M2JkZjRiY2Y1OWYxOGFkMyIsImlhdCI6MTY4Nzg4MDYyOCwiZXhwIjoxNjg3OTYzNDI4fQ.SmhEqGINLTlkGi4YyS6Id1zkXIVJyKDuelE6ImpR9W8",
-        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "OK",
@@ -630,18 +1012,17 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
                     "summary": "Success",
                     "value": {
                       "name": "John Dow2",
+                      "id": "2221122112221121",
                       "email": "jonDow2@com.ua",
                       "avatarURL": "",
-                      "theme": "dark"
+                      "theme": "light"
                     }
                   }
                 }
@@ -649,18 +1030,184 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Unauthorized - виникає якщо не передати токен, або Email or password is wrong - при невірному введенні логіну чи паролю",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
-                    "summary": "Exception",
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/columns": {
+      "post": {
+        "summary": "Створення нової колонки",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з колонками"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "description": "Заголовок колонки",
+            "required": true,
+            "example": "Нова дошка"
+          },
+          {
+            "name": "ownerUser",
+            "in": "body",
+            "description": "ID Користувача власника колонки",
+            "required": true,
+            "example": "ID користувача власника"
+          },
+          {
+            "name": "ownerDesk",
+            "in": "body",
+            "description": "ID дошки власника колонки",
+            "required": true,
+            "example": "ID користувача власника"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Заголовок дошки"
+                  },
+                  "ownerUser": {
+                    "type": "string",
+                    "description": "ID користувача власника"
+                  },
+                  "ownerDesk": {
+                    "type": "string",
+                    "description": "ID дошки власника"
+                  }
+                }
+              },
+              "example": {
+                "title": "TNew desk 1",
+                "ownerUser": "ID користувача власника",
+                "ownerDesk": "ID дошки власника"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "title": "Tru-tu-tu",
+                      "ownerUser": "6499ddcf3888df7fc9af9c64",
+                      "ownerDesk": "6499131312314f7fc9af9c64",
+                      "_id": "649c75972f54b861ddd4420b",
+                      "createdAt": "2023-06-28T18:01:59.574Z",
+                      "updatedAt": "2023-06-28T18:01:59.574Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
                     "value": {
                       "message": "Unauthorized"
                     }
@@ -669,25 +1216,21 @@
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3840929-run"
-      }
-    },
-    "/column/{deskID}": {
+        }
+      },
+
       "get": {
         "summary": "Отримання всіх колонок однієї дошки",
-        "x-apidog-folder": "Задачи API/Робота з колонками",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "",
-        "tags": ["Задачи API/Робота з колонками"],
+        "tags": ["Робота з колонками"],
         "parameters": [
           {
-            "name": "deskID",
-            "in": "path",
+            "name": "ownerDesk",
+            "in": "query",
             "description": "ID дошки, за якою здійснюється фільтрування колонок",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": ".../api/columns?ownerDesk=64980586a9e98b553d767786",
             "schema": {
               "type": "string"
             }
@@ -712,15 +1255,16 @@
                       "ownerUser": {
                         "type": "string"
                       },
+                      "ownerDesk": {
+                        "type": "string"
+                      },
                       "createdAt": {
                         "type": "string"
                       },
                       "updatedAt": {
                         "type": "string"
                       }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                    }
                   }
                 },
                 "examples": {
@@ -728,108 +1272,307 @@
                     "summary": "OK",
                     "value": [
                       {
-                        "_id": "64980586a9e98b553d767786",
-                        "title": "Test#1 desk",
+                        "_id": "64981890d72a5da7552f32fe",
+                        "title": "Test1 column",
                         "ownerUser": "first user ID",
-                        "createdAt": "2023-06-25T09:14:46.374Z",
-                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                        "ownerDesk": "64980586a9e98b553d767786",
+                        "createdAt": "2023-06-25T10:36:00.843Z",
+                        "updatedAt": "2023-06-25T10:36:00.843Z"
+                      },
+                      {
+                        "_id": "64981bf18d86a4438f3cc0f1",
+                        "title": "Test4 column",
+                        "ownerUser": "first user ID",
+                        "ownerDesk": "64980586a9e98b553d767786",
+                        "createdAt": "2023-06-25T10:50:25.363Z",
+                        "updatedAt": "2023-06-25T10:50:25.363Z"
                       }
                     ]
                   }
                 }
               }
             }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842870-run"
+        }
       }
     },
-    "/column/{columnID}": {
-      "get": {
-        "summary": "Отримання однієї колонки за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з колонками",
-        "x-apidog-status": "developing",
+
+    "/tasks": {
+      "post": {
+        "summary": "Створення нового завдання",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з колонками"],
+        "tags": ["Робота з завданнями"],
         "parameters": [
           {
-            "name": "columnID",
-            "in": "path",
-            "description": "ID колонки для пошуку",
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
             "required": true,
-            "example": "{% faker database.collation %}",
-            "schema": {
-              "type": "string"
-            }
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "description": "Заголовок завдання",
+            "required": true,
+            "example": "Нова дошка"
+          },
+          {
+            "name": "ownerUser",
+            "in": "body",
+            "description": "ID Користувача власника завдання",
+            "required": true,
+            "example": "eyJhbGciOiJIUzI1NiIsInR"
+          },
+          {
+            "name": "ownerDesk",
+            "in": "body",
+            "description": "ID дошки власника завдання",
+            "required": true,
+            "example": "CI6IkpXVCJ9.e"
+          },
+          {
+            "name": "ownerColumn",
+            "in": "body",
+            "description": "ID колонки власника завдання",
+            "required": true,
+            "example": "IsImlhdCI6MTY4NzcyNz"
+          },
+          {
+            "name": "taskValue",
+            "in": "body",
+            "description": "Зміст завдання",
+            "required": false,
+            "example": "Lorem ipsum...."
+          },
+          {
+            "name": "priority",
+            "in": "body",
+            "description": "Пріоритет завдання",
+            "required": false,
+            "example": "medium"
+          },
+          {
+            "name": "deadline",
+            "in": "body",
+            "description": "Термін завдання у форматі (DD-MM-YYYY)",
+            "required": false,
+            "example": "12-12-1212"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Заголовок завдання"
+                  },
+                  "ownerUser": {
+                    "type": "string",
+                    "description": "Користувач власник завдання"
+                  },
+                  "ownerDesk": {
+                    "type": "string",
+                    "description": "Дошка власник завдання"
+                  },
+                  "ownerColumn": {
+                    "type": "string",
+                    "description": "Колонка власник завдання"
+                  },
+                  "taskValue": {
+                    "type": "string",
+                    "description": "Зміст завдання"
+                  },
+                  "priority": {
+                    "type": "string",
+                    "description": "Пріоритет завдання"
+                  },
+                  "deadline": {
+                    "type": "date",
+                    "description": "Термін завдання"
+                  }
+                }
+              },
+              "example": {
+                "title": "New task 1",
+                "ownerUser": "eyJhbGciOiJIUzI1NiIsInR",
+                "ownerDesk": "CI6IkpXVCJ9.e",
+                "ownerColumn": "IsImlhdCI6MTY4NzcyNz",
+                "taskValue": "Lorem ipsum....",
+                "priority": "medium",
+                "deadline": "12-12-1212"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "ownerUser": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string"
-                      },
-                      "updatedAt": {
-                        "type": "string"
-                      }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
-                  }
+                  "type": "object",
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
-                    "summary": "OK",
-                    "value": [
-                      {
-                        "_id": "64980586a9e98b553d767786",
-                        "title": "Test#1 desk",
-                        "ownerUser": "first user ID",
-                        "createdAt": "2023-06-25T09:14:46.374Z",
-                        "updatedAt": "2023-06-25T09:14:46.374Z"
-                      }
-                    ]
+                    "summary": "Success",
+                    "value": {
+                      "title": "New task 1",
+                      "ownerUser": "eyJhbGciOiJIUzI1NiIsInR",
+                      "ownerDesk": "CI6IkpXVCJ9.e",
+                      "ownerColumn": "IsImlhdCI6MTY4NzcyNz",
+                      "taskValue": "Lorem ipsum....",
+                      "priority": "medium",
+                      "deadline": "12-12-1212",
+                      "_id": "649c75972f54b861ddd4420b",
+                      "createdAt": "2023-06-28T18:01:59.574Z",
+                      "updatedAt": "2023-06-28T18:01:59.574Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
                   }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842871-run"
-      }
-    },
-    "/tasks/{columnID}": {
+        }
+      },
       "get": {
-        "summary": "Отримання всіх задач по ID колонки",
-        "x-apidog-folder": "Задачи API/Рбота з задачами",
-        "x-apidog-status": "developing",
+        "summary": "Отримання всіх завдань по ID колонки",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Рбота з задачами"],
+        "tags": ["Робота з завданнями"],
         "parameters": [
           {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
             "name": "columnID",
-            "in": "path",
+            "in": "query",
             "description": "ID колонки для пошуку пов'язаних з нею задань",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": ".../api/tasks?ownerColumn=64981890d72a5da7552f32fe",
             "schema": {
               "type": "string"
             }
@@ -860,9 +1603,7 @@
                       "updatedAt": {
                         "type": "string"
                       }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                    }
                   }
                 },
                 "examples": {
@@ -871,8 +1612,19 @@
                     "value": [
                       {
                         "_id": "64980586a9e98b553d767786",
-                        "title": "Test#1 desk",
+                        "title": "Test#1 task",
                         "ownerUser": "first user ID",
+                        "ownerDesk": "ad124545212asda5512",
+                        "ownerColumn": "172537asdlhadh17236",
+                        "createdAt": "2023-06-25T09:14:46.374Z",
+                        "updatedAt": "2023-06-25T09:14:46.374Z"
+                      },
+                      {
+                        "_id": "6498aaaaaaaaaaaaasss3d767786",
+                        "title": "Test#2 task",
+                        "ownerUser": "first user ID",
+                        "ownerDesk": "ad124545212asda5512",
+                        "ownerColumn": "172537asdlhadh17236",
                         "createdAt": "2023-06-25T09:14:46.374Z",
                         "updatedAt": "2023-06-25T09:14:46.374Z"
                       }
@@ -882,19 +1634,23 @@
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3842952-run"
+        }
       }
     },
     "/tasks/{taskID}": {
       "get": {
         "summary": "Отримання однієї задачі по ID Copy",
-        "x-apidog-folder": "Задачи API/Рбота з задачами",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Рбота з задачами"],
+        "tags": ["Робота з завданнями"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "taskID",
             "in": "path",
@@ -925,15 +1681,16 @@
                       "ownerUser": {
                         "type": "string"
                       },
+                      "ownerDesk": {
+                        "type": "string"
+                      },
                       "createdAt": {
                         "type": "string"
                       },
                       "updatedAt": {
                         "type": "string"
                       }
-                    },
-                    "x-apidog-ignore-properties": [],
-                    "x-apidog-orders": ["_id", "title", "ownerUser", "createdAt", "updatedAt"]
+                    }
                   }
                 },
                 "examples": {
@@ -941,9 +1698,11 @@
                     "summary": "OK",
                     "value": [
                       {
-                        "_id": "64980586a9e98b553d767786",
-                        "title": "Test#1 desk",
+                        "_id": "6498aaaaaaaaaaaaasss3d767786",
+                        "title": "Test#2 task",
                         "ownerUser": "first user ID",
+                        "ownerDesk": "ad124545212asda5512",
+                        "ownerColumn": "172537asdlhadh17236",
                         "createdAt": "2023-06-25T09:14:46.374Z",
                         "updatedAt": "2023-06-25T09:14:46.374Z"
                       }
@@ -952,26 +1711,114 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Task with id: ${taskId} not found - якщо не знайдено завдання по ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Task with id: ${taskId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843282-run"
+        }
       },
       "patch": {
         "summary": "Редагування задачі за ії ID",
-        "x-apidog-folder": "Задачи API/Рбота з задачами",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Рбота з задачами"],
+        "tags": ["Робота з завданнями"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "taskID",
             "in": "path",
             "description": "ID задачи за якою треба внести зміни",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": "asdkald12313169asksdasdj",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "description": "Найменування завдання",
+            "required": false,
+            "example": "New task name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskValue",
+            "in": "body",
+            "description": "Зміст завдання",
+            "required": false,
+            "example": "Створити нове завдання",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "priority",
+            "in": "body",
+            "description": "Пріоритет завдання",
+            "required": false,
+            "example": "medium",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deadline",
+            "in": "body",
+            "description": "Кінцеви термін завдання у форматі (DD-MM-YYYY)",
+            "required": false,
+            "example": "12-12-1212",
+            "schema": {
+              "type": "date"
             }
           }
         ],
@@ -991,11 +1838,9 @@
                     "type": "string"
                   },
                   "deadline": {
-                    "type": "string"
+                    "type": "date"
                   }
-                },
-                "x-apidog-orders": ["title", "taskValue", "priority", "deadline"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "title": "new title",
@@ -1008,35 +1853,74 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Task with id: ${taskId} not found - якщо не знайдено завдання по ID",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Task with id: ${taskId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843184-run"
+        }
       },
       "delete": {
         "summary": "Видалення задачі за ії ID",
-        "x-apidog-folder": "Задачи API/Рбота з задачами",
-        "x-apidog-status": "developing",
+
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Рбота з задачами"],
+        "tags": ["Робота з завданнями"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "taskID",
             "in": "path",
             "description": "ID задачи для видалення",
             "required": true,
-            "example": "{% faker address.buildingNumber %}",
+            "example": "asldk34535353asdlkayy",
             "schema": {
               "type": "string"
             }
@@ -1049,85 +1933,203 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "message": "task deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Task with id: ${taskId} not found - якщо не знайдено завдання по ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Task with id: ${taskId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843195-run"
+        }
       }
     },
-    "/tasks": {
-      "post": {
-        "summary": "Створення нової дошки",
-        "x-apidog-folder": "Задачи API/Робота з дошками",
-        "x-apidog-status": "developing",
+
+    "/columns/{columnID}": {
+      "get": {
+        "summary": "Отримання однієї колонки за ії ID",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з дошками"],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "description": "Заголовок задачи"
-                  },
-                  "ownerUser": {
-                    "type": "string",
-                    "description": "ID користувача власника"
-                  }
-                },
-                "x-apidog-orders": ["title", "ownerUser"],
-                "required": ["title", "ownerUser"],
-                "x-apidog-ignore-properties": []
-              },
-              "example": {
-                "title": "Test task 3",
-                "ownerUser": "{user ID}"
-              }
+        "tags": ["Робота з колонками"],
+        "parameters": [
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колонки для пошуку",
+            "required": true,
+            "example": "654646546465446465",
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "ownerUser": {
+                        "type": "string"
+                      },
+                      "ownerDesk": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": [
+                      {
+                        "_id": "64981890d72a5da7552f32fe",
+                        "title": "Test1 column",
+                        "ownerUser": "first user ID",
+                        "ownerDesk": "64980586a9e98b553d767786",
+                        "createdAt": "2023-06-25T10:36:00.843Z",
+                        "updatedAt": "2023-06-25T10:36:00.843Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843277-run"
-      }
-    },
-    "/columns/{columnID}": {
+        }
+      },
       "patch": {
         "summary": "Редагування назви колонки за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з колонками",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з колонками"],
+        "tags": ["Робота з колонками"],
         "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
           {
             "name": "columnID",
             "in": "path",
             "description": "ID колонки для редагування",
             "required": true,
-            "example": "{% faker database.collation %}",
+            "example": "as1205050521244421",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "title",
+            "in": "body",
+            "description": "Нова назва колонки",
+            "required": true,
+            "example": "new title",
             "schema": {
               "type": "string"
             }
@@ -1142,9 +2144,7 @@
                   "title": {
                     "type": "string"
                   }
-                },
-                "x-apidog-orders": ["title"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "title": "new title"
@@ -1159,91 +2159,207 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
-                }
-              }
-            }
-          }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843273-run"
-      },
-      "delete": {
-        "summary": "Видалення задачі за ії ID",
-        "x-apidog-folder": "Задачи API/Робота з колонками",
-        "x-apidog-status": "developing",
-        "deprecated": false,
-        "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з колонками"],
-        "parameters": [
-          {
-            "name": "columnID",
-            "in": "path",
-            "description": "ID колоки для видалення",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
-                }
-              }
-            }
-          }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843276-run"
-      }
-    },
-    "/users/logout": {
-      "post": {
-        "summary": "Вихід (логаут) користувача",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
-        "deprecated": false,
-        "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з користувачем"],
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "description": "",
-            "required": true,
-            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
                     "summary": "Success",
                     "value": {
-                      "name": "John Dow2",
-                      "email": "jonDow2@com.ua",
-                      "avatarURL": "",
-                      "theme": "dark"
+                      "title": "New title"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Column with id: ${columnId} not found - якщо не знайдено колонку за ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Column with id: {columnId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Видалення колонки за ії ID",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з колонками"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "columnID",
+            "in": "path",
+            "description": "ID колонки для редагування",
+            "required": true,
+            "example": "as1205050521244421",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "OK",
+                    "value": {
+                      "message": "Column deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО Column with id: ${columnId} not found - якщо не знайдено колонку за ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  },
+
+                  "2": {
+                    "summary": "No ID",
+                    "value": {
+                      "message": "Column with id: {columnId} not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "Вихід (логаут) користувача",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "message": "logout OK"
                     }
                   }
                 }
@@ -1256,13 +2372,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "examples": {
                   "1": {
-                    "summary": "Exception",
+                    "summary": "Unauthorized",
                     "value": {
                       "message": "Unauthorized"
                     }
@@ -1271,19 +2385,31 @@
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843283-run"
+        }
       }
     },
-    "/theme": {
+    "/users/theme": {
       "patch": {
         "summary": "Зміна теми користувача",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з користувачем"],
-        "parameters": [],
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "theme",
+            "in": "body",
+            "description": "Назва теми користувача",
+            "required": true,
+            "example": "violet"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1294,10 +2420,7 @@
                     "type": "string",
                     "description": "Назва теми з доступних: (\"dark\", \"light\", \"violet\")"
                   }
-                },
-                "x-apidog-orders": ["theme"],
-                "required": ["theme"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "theme": "light"
@@ -1313,25 +2436,69 @@
                 "schema": {
                   "type": "object",
                   "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "examples": {
+                    "1": {
+                      "summary": "OK",
+                      "value": {
+                        "theme": "light"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843369-run"
+        }
       }
     },
-    "/help": {
+    "/users/help": {
       "post": {
         "summary": "Запит допомоги",
-        "x-apidog-folder": "Задачи API/Робота з користувачем",
-        "x-apidog-status": "developing",
         "deprecated": false,
         "description": "Обов'язково в heder запиту треба передавати Bearer token",
-        "tags": ["Задачи API/Робота з користувачем"],
-        "parameters": [],
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Пошта користувача, який потребує допомоги",
+            "required": true,
+            "example": "123@com.ua"
+          },
+          {
+            "name": "comment",
+            "in": "body",
+            "description": "Текст повідомлення",
+            "required": true,
+            "example": "Help me please!!!  HELP! HELP! HELP!"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1346,10 +2513,7 @@
                     "type": "string",
                     "description": "Комментар користувача"
                   }
-                },
-                "x-apidog-orders": ["email", "comment"],
-                "required": ["email", "comment"],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "email": "123131@com",
@@ -1360,35 +2524,46 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "При успішному выдправленні листа",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "sended",
+                    "value": {
+                      "message": "Email has been send successfully"
+                    }
+                  }
                 }
               }
             }
           }
-        },
-        "x-run-in-apidog": "https://apidog.com/web/project/370253/apis/api-3843377-run"
+        }
       }
     }
   },
   "components": {
-    "schemas": {}
-  },
-  "securitySchemes": {
-    "Bearer": {
-      "type": "http",
-      "scheme": "bearer",
-      "bearerFormat": "JWT"
+    "schemas": {},
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   },
+
   "servers": [
-    { "url": "http://localhost:3000", "description": "Development" },
+    { "url": "http://localhost:3000/api/", "description": "Development" },
     { "url": "https://tasks-backed.onrender.com/api/", "description": "Production" }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
   ]
 }
