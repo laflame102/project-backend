@@ -71,7 +71,7 @@ const refreshTokenSchema = Joi.object({
 });
 
 const themeSchema = Joi.object({
-  theme: Joi.string().valid("dark", "light", "violet"),
+  theme: Joi.string().valid("dark", "light", "violet").required(),
 });
 
 const helpSchema = Joi.object({
