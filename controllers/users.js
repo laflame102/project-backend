@@ -68,8 +68,8 @@ const refresh = async (req, res) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
-   throw HttpError(401, "Unauthorized");
-  }
+    res.status(401);
+  } 
 
   try {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
