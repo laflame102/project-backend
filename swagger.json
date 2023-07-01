@@ -329,6 +329,20 @@
             "description": "ID Користувача власника дошки",
             "required": true,
             "example": "ID користувача власника"
+          },
+          {
+            "name": "background",
+            "in": "body",
+            "description": "Бекграунд дошки",
+            "required": false,
+            "example": "...шлях до бекграунду дошки"
+          },
+          {
+            "name": "icon",
+            "in": "body",
+            "description": "Іконка дошки",
+            "required": true,
+            "example": "...шлях до іконки дошки"
           }
         ],
         "requestBody": {
@@ -344,12 +358,22 @@
                   "ownerUser": {
                     "type": "string",
                     "description": "ID користувача власника"
+                  },
+                  "background": {
+                    "type": "string",
+                    "description": "...шлях до бекграунду дошки"
+                  },
+                  "icon": {
+                    "type": "string",
+                    "description": "...шлях до іконки дошки"
                   }
                 }
               },
               "example": {
                 "title": "TNew desk 1",
-                "ownerUser": "ID користувача власника"
+                "ownerUser": "ID користувача власника",
+                "background": "...шлях до бекграунду дошки",
+                "icon": "...шлях до іконки дошки"
               }
             }
           }
@@ -370,6 +394,8 @@
                       "title": "Tru-tu-tu",
                       "ownerUser": "6499ddcf3888df7fc9af9c64",
                       "_id": "649c75972f54b861ddd4420b",
+                      "background": "...шлях до бекграунду дошки",
+                      "icon": "...шлях до іконки дошки",
                       "createdAt": "2023-06-28T18:01:59.574Z",
                       "updatedAt": "2023-06-28T18:01:59.574Z"
                     }
@@ -650,6 +676,104 @@
         }
       }
     },
+    "/desk/:deskId/icon": {
+      "patch": {
+        "summary": "Зміна іконки дошки",
+
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з дошками"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "deskID",
+            "in": "path",
+            "description": "ID дошки, за яким змінюється бекграунд дошки",
+            "required": true,
+            "example": "56461321654613216465",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "icon",
+            "in": "path",
+            "description": "посилання на іконку",
+            "required": true,
+            "example": "посилання на іконку",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "icon": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "icon": "посилання на іконку"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/register": {
       "post": {
         "summary": "Регістрація нового користувача",
@@ -703,6 +827,149 @@
                 },
 
                 "required": ["name", "email", "password"]
+              },
+              "example": {
+                "name": "John Dow",
+                "email": "jonDow@com.ua",
+                "password": "asdfasdf"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Success",
+                    "value": {
+                      "name": "John Dow",
+                      "email": "jonDow@com.ua"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing fields - Виникає при пропущеному полі у тілі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "400",
+                    "value": {
+                      "message": "missing required .... fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Email already in use - Виникає якщо вказаний email вже зареєстрований в базі",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "x-apidog-ignore-properties": [],
+                  "x-apidog-orders": []
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Email is already use",
+                    "value": {
+                      "message": "Email already in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/update": {
+      "put": {
+        "summary": "Редагування користувача",
+        "deprecated": false,
+        "description": "",
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "body",
+            "description": "Ім'я нового користувача",
+            "required": false,
+            "example": "John Dow"
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Електронна пошта нового користувача",
+            "required": false,
+            "example": "jonDow@com.ua"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Пароль нового користувача (Мінімум - 8, максимум - 64 символи)",
+            "required": false,
+            "example": "asdfasdf"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "New user name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "New user email",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "New user password",
+                    "minLength": 8,
+                    "maxLength": 64
+                  }
+                }
               },
               "example": {
                 "name": "John Dow",
@@ -2461,6 +2728,110 @@
                     "summary": "Unauthorized",
                     "value": {
                       "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО якщо юзера за ID не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "summary": "Зміна аватару користувача",
+        "deprecated": false,
+        "description": "Обов'язково в heder запиту треба передавати Bearer token",
+        "tags": ["Робота з користувачем"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "heders",
+            "description": "Передати JWT в заголовці запиту",
+            "required": true,
+            "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OTg4NDRmZWNlYzQ1OWJjZTVjOThlMCIsImlhdCI6MTY4NzcyNzU5OCwiZXhwIjoxNjg3ODEwMzk4fQ.bOyKN8hOJsAnsnc8QnPwxltF7AyAorAE6lk2uXAD-tg"
+          },
+          {
+            "name": "avatar",
+            "in": "body",
+            "description": "Шлях до аватару користувача",
+            "required": true,
+            "example": "Шлях до аватару користувача"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "description": "Шлях до аватару користувача"
+                  }
+                }
+              },
+              "example": {
+                "avatar": "Шлях до аватару користувача"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized - виникає якщо не передати токен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Виникає при помилці в адресі запиту АБО якщо юзера за ID не знайдено",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "1": {
+                    "summary": "404",
+                    "value": {
+                      "message": "Not found"
                     }
                   }
                 }

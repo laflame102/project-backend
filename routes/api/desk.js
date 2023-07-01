@@ -30,6 +30,14 @@ deskRouter.patch(
   deskController.updateDesk
 );
 
+deskRouter.patch(
+  '/:deskId/icon',
+  isValidId,
+  authenticate,
+  validateBody(schemas.updateDeskIconSchemaJoi),
+  deskController.updateDesk
+);
+
 deskRouter.delete('/:deskId', authenticate, isValidId, deskController.deleteDesk);
 
 module.exports = deskRouter;
