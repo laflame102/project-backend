@@ -12,7 +12,7 @@ const deskSchema = new Schema(
       type: String,
       required: true,
     },
-     icon: {
+    icon: {
       type: String,
       required: true,
     },
@@ -92,6 +92,10 @@ const updateDeskBGSchemaJoi = Joi.object({
   background: Joi.string().required(),
 });
 
+const updateDeskIconSchemaJoi = Joi.object({
+  icon: Joi.string().required(),
+});
+
 const columnSchemaJoi = Joi.object({
   title: Joi.string().required(),
   ownerUser: Joi.string().required(),
@@ -126,6 +130,7 @@ const schemas = {
   updateColumnSchemaJoi,
   taskSchemaJoi,
   updateTaskSchemaJoi,
+  updateDeskIconSchemaJoi,
 };
 
 const Desk = model('desk', deskSchema);
