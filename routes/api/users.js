@@ -21,11 +21,11 @@ router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvata
 
 router.patch('/theme', authenticate, validateBody(schemas.themeSchema), ctrl.theme);
 
-router.patch('/name', authenticate, validateBody(schemas.themeSchema), ctrl.name);
+router.patch('/name', authenticate, validateBody(schemas.nameSchema), ctrl.name);
 
-router.patch('/email', authenticate, validateBody(schemas.themeSchema), ctrl.email);
+router.patch('/email', authenticate, validateBody(schemas.emailSchemaSchema), ctrl.email);
 
-router.patch('/password', authenticate, validateBody(schemas.themeSchema), ctrl.password);
+router.patch('/password', authenticate, validateBody(schemas.passwordSchema), ctrl.password);
 
 router.post('/help', authenticate, validateBody(schemas.helpSchema), ctrl.help);
 
