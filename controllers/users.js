@@ -150,7 +150,7 @@ const name = async (req, res) => {
   const result = await User.findByIdAndUpdate(id, req.body, { new: true });
 
   res.json({
-    theme: result.name,
+    name: result.name,
   });
 };
 
@@ -159,7 +159,7 @@ const email = async (req, res) => {
   const result = await User.findByIdAndUpdate(id, req.body, { new: true });
 
   res.json({
-    theme: result.email,
+    email: result.email,
   });
 };
 

@@ -23,7 +23,7 @@ router.patch('/theme', authenticate, validateBody(schemas.themeSchema), ctrl.the
 
 router.patch('/name', authenticate, validateBody(schemas.nameSchema), ctrl.name);
 
-router.patch('/email', authenticate, validateBody(schemas.emailSchemaSchema), ctrl.email);
+router.patch('/email', authenticate, validateBody(schemas.emailSchema), ctrl.email);
 
 router.patch('/password', authenticate, validateBody(schemas.passwordSchema), ctrl.password);
 
