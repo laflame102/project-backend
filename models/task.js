@@ -92,6 +92,10 @@ const updateDeskBGSchemaJoi = Joi.object({
   background: Joi.string().required(),
 });
 
+const updateDeskTitleSchemaJoi = Joi.object({
+  title: Joi.string().required(),
+});
+
 const updateDeskIconSchemaJoi = Joi.object({
   icon: Joi.string().required(),
 });
@@ -131,6 +135,7 @@ const schemas = {
   taskSchemaJoi,
   updateTaskSchemaJoi,
   updateDeskIconSchemaJoi,
+  updateDeskTitleSchemaJoi,
 };
 
 const Desk = model('desk', deskSchema);
