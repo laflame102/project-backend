@@ -23,6 +23,14 @@ deskRouter.patch(
 );
 
 deskRouter.patch(
+  '/:deskId/title',
+  isValidId,
+  authenticate,
+  validateBody(schemas.updateDeskTitleSchemaJoi),
+  deskController.updateDesk
+);
+
+deskRouter.patch(
   '/:deskId/background',
   isValidId,
   authenticate,
