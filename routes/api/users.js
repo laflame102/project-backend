@@ -17,7 +17,7 @@ router.put('/update', authenticate, validateBody(schemas.updateProfileSchema), c
 
 router.post('/logout', authenticate, ctrl.logout);
 
-router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar);
+router.post('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar);
 
 router.patch('/theme', authenticate, validateBody(schemas.themeSchema), ctrl.theme);
 
